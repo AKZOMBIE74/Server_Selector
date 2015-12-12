@@ -1,0 +1,6 @@
+name: Server Selector
+version: 1.0
+main: me.AKZOMBIE74.Selector
+commands:
+  ss:
+    description: Don't worry about this command. A player is not suppose to use this.
