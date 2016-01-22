@@ -148,7 +148,7 @@ public class Selector extends JavaPlugin {
                 meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
                 if (showcount) {
 
-                    out.writeUTF("PlayerCount");
+                    //out.writeUTF("PlayerCount");
                     out.writeUTF(name);
                     Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
                     BungeeCord.getInstance().getServerInfo(name).ping(new Callback<ServerPing>() {
