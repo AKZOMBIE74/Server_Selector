@@ -168,6 +168,7 @@ public class Selector extends JavaPlugin {
 
                 meta.setLore(lore);
 
+
                 stack.setItemMeta(meta);
 
                 items.add(stack);
