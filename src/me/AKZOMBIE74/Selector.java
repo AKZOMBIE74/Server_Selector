@@ -52,7 +52,7 @@ public class Selector extends JavaPlugin {
         createConfig();
 
         //Enable Log
-        getLogger().info("Compass Nav has been enabled");
+        getLogger().info("Server Selector has been enabled");
     }
 
     //onDisable stuff
@@ -91,6 +91,7 @@ public class Selector extends JavaPlugin {
             if (!file.exists()) {
                 getLogger().info("Config.yml not found, creating!");
                 saveDefaultConfig();
+
 
 
                 String[] list = new String[]{"Go",
