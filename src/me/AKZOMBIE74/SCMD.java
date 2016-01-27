@@ -27,7 +27,6 @@ public class SCMD implements CommandExecutor {
                         Selector.getInstance().getOut().writeUTF("ConnectOther");
                         Selector.getInstance().getOut().writeUTF(p.getName());
                         Selector.getInstance().getOut().writeUTF(Selector.getInstance().getConfig().getString("Servers." + key + ".name"));
-                        Thread.sleep(1000);
                         Bukkit.getServer().sendPluginMessage(Selector.getInstance(), "BungeeCord", Selector.getInstance().getB().toByteArray());
                         p.sendMessage(ChatColor.GREEN + "Successfully teleported to " + Selector.getInstance().getConfig().getString("Servers." + key + ".name"));
                     }
