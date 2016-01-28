@@ -29,6 +29,8 @@ public class Selector extends JavaPlugin{
 
     private static Selector instance;
 
+    private static PML pml = new PML();
+
 
     //onEnable stuff
     @Override
@@ -53,8 +55,8 @@ public class Selector extends JavaPlugin{
         getLogger().info("Server Selector has been enabled");
     }
 
-    public PML getPML() {
-        return new PML();
+    public static PML getPML() {
+        return pml;
     }
 
     //onDisable stuff
