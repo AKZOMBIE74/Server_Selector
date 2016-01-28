@@ -6,9 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 /**
- * Created by AKZOMBIE74 on 1/22/2016.
+ * Created by AKZOMBIE74 on 1/27/2016.
  */
-public class PML implements PluginMessageListener {
+public class PML implements PluginMessageListener{
+
     private int pc;
 
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
@@ -26,7 +27,6 @@ public class PML implements PluginMessageListener {
         }
 
     }
-
 
     public int getPc() {
         return pc;

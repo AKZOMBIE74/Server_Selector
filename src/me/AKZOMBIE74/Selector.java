@@ -1,8 +1,5 @@
 package me.AKZOMBIE74;
 
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.Callback;
-import net.md_5.bungee.api.ServerPing;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,11 +16,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by AKZOMBIE74 on 11/11/2015.
  */
-public class Selector extends JavaPlugin {
+public class Selector extends JavaPlugin{
     private Set<String> sectionKeys;
 
     private ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -40,7 +38,7 @@ public class Selector extends JavaPlugin {
         //Register Commands
         getCommand("ss").setExecutor(new SCMD());
 
-        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PML());
+        Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", getPML());
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         //Register Events
@@ -55,9 +53,14 @@ public class Selector extends JavaPlugin {
         getLogger().info("Server Selector has been enabled");
     }
 
+    public PML getPML() {
+        return new PML();
+    }
+
     //onDisable stuff
     @Override
     public void onDisable() {
+        instance = null;
 
         //Save Config
         saveConfig();
@@ -132,7 +135,7 @@ public class Selector extends JavaPlugin {
 
         sectionKeys = getConfig().getConfigurationSection("Servers").getKeys(false);
 
-        List<ItemStack> items = new ArrayList<ItemStack>(sectionKeys.size());
+        AtomicReference<ArrayList<ItemStack>> items = new AtomicReference<>(new ArrayList<ItemStack>(sectionKeys.size()));
 
 
         for (String key : sectionKeys) {
@@ -152,19 +155,7 @@ public class Selector extends JavaPlugin {
                     out.writeUTF("PlayerCount");
                     out.writeUTF(name);
                     Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
-                    BungeeCord.getInstance().getServerInfo(name).ping(new Callback<ServerPing>() {
-                        @Override
-                        public void done(ServerPing serverPing, Throwable throwable) {
-                            int max = serverPing.getPlayers().getMax();
-                            try {
-                                lore.add("Players Online: "
-                                        + PML.class.newInstance().getPc() + "/" + max
-                                );
-                            } catch (InstantiationException | IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    lore.add("Players Online: "+ getPML().getPc());
                 }
 
                 meta.setLore(lore);
@@ -172,7 +163,7 @@ public class Selector extends JavaPlugin {
 
                 stack.setItemMeta(meta);
 
-                items.add(stack);
+                items.get().add(stack);
                 inv.setItem(getConfig().getInt("Servers." + key + ".slot"), stack);
             }
         }
