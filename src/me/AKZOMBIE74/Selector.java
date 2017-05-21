@@ -14,6 +14,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
@@ -120,6 +121,7 @@ public class Selector extends JavaPlugin{
                 getConfig().set("Servers.server1.display-name", "Minigames!");
                 getConfig().set("Servers.server1.showcount", true);
                 getConfig().set("Servers.server1.lore", list);
+                getConfig().set("Servers.server1.showPlayerList", true);
                 saveConfig();
             } else {
                 getLogger().info("Config.yml found, loading!");
@@ -146,6 +148,7 @@ public class Selector extends JavaPlugin{
                 String name = getConfig().getString("Servers." + key + ".name");
                 final List<String> lore = getConfig().getStringList("Servers." + key + ".lore");
                 Boolean showcount = getConfig().getBoolean("Servers." + key + ".showcount");
+                Boolean playerList = getConfig().getBoolean("Servers."+key+".showPlayerList");
                 Material m = Material.valueOf(getConfig().getString("Servers." + key + ".Material"));
 
                 ItemStack stack = new ItemStack(m, 1);
@@ -158,6 +161,12 @@ public class Selector extends JavaPlugin{
                     out.writeUTF(name);
                     Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
                     lore.add("Players Online: "+ getPML().getPc());
+                }
+                if (playerList){
+                    out.writeUTF("PlayerList");
+                    out.writeUTF(name);
+                    Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
+                    lore.addAll(Arrays.asList(getPML().getPlayerList()));
                 }
 
                 meta.setLore(lore);
