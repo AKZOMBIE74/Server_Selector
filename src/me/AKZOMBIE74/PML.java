@@ -11,6 +11,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 public class PML implements PluginMessageListener{
 
     private int pc;
+    private String[] pList;
 
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!channel.equals("BungeeCord")) {
@@ -24,11 +25,19 @@ public class PML implements PluginMessageListener{
             // the data.
             String server = in.readUTF(); // Name of server, as given in the arguments
             pc = in.readInt();
+        } else if (subchannel.equals("PlayerList")){
+            String server = in.readUTF(); // The name of the server you got the player list of, as given in args.
+            String[] playerList = in.readUTF().split(", ");
+            pList = playerList;
         }
 
     }
 
     public int getPc() {
         return pc;
+    }
+
+    public String[] getPlayerList(){
+        return pList;
     }
 }
