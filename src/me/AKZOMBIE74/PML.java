@@ -27,8 +27,7 @@ public class PML implements PluginMessageListener{
             pc = in.readInt();
         } else if (subchannel.equals("PlayerList")){
             String server = in.readUTF(); // The name of the server you got the player list of, as given in args.
-            String[] playerList = in.readUTF().split(", ");
-            pList = playerList;
+            pList = in.readUTF().split(", ");
         }
 
     }
