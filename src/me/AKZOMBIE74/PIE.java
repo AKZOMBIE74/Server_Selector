@@ -1,5 +1,6 @@
 package me.AKZOMBIE74;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +19,11 @@ public class PIE implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e) throws IOException {
         Player p = e.getPlayer();
+        String name = ChatColor.translateAlternateColorCodes(
+                '&', Selector.getInstance().getConfig().getString("Compass.name"));
 
-        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (p.getItemInHand().equals(x)) {
+        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && p.getItemInHand().hasItemMeta()) {
+            if (p.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(name) && p.getItemInHand().getType() == PIE.x.getType()) {
                 Selector.getInstance().OpenGui(p);
             }
         }
