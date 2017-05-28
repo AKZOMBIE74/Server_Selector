@@ -18,19 +18,24 @@ public class PJE implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         PIE.x = new ItemStack(Material.COMPASS, 1);
+        Boolean hasCompass = false;
+
+        String name = ChatColor.translateAlternateColorCodes(
+                '&', Selector.getInstance().getConfig().getString("Compass.name"));
 
         ItemMeta meta = PIE.x.getItemMeta();
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', Selector.getInstance().getConfig().getString("Compass.name")));
+        meta.setDisplayName(name);
         meta.setLore(Selector.getInstance().getConfig().getStringList("Compass.lore"));
 
         PIE.x.setItemMeta(meta);
 
-        ItemStack z = new ItemStack(Material.AIR, 1);
-
-        ItemMeta m = z.getItemMeta();
-        m.setDisplayName("Air");
-
-        if (!p.getInventory().contains(PIE.x)) {
+        for (ItemStack item : p.getInventory().getContents()) {
+            if (item!=null)
+                if (item.hasItemMeta())
+                    if (item.getItemMeta().getDisplayName().equalsIgnoreCase(name) && item.getType() == PIE.x.getType())
+                        hasCompass = true;
+        }
+        if (!hasCompass) {
             p.getInventory().addItem(PIE.x);
         }
     }
