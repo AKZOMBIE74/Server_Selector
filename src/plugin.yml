@@ -3,4 +3,4 @@ version: 2.1.5
 main: me.AKZOMBIE74.Selector
 commands:
   ss:
-    description: Don't worry about this command. A player is not suppose to use this.
+    description: Allows a player to connect to a server.
