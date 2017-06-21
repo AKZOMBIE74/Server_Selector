@@ -26,6 +26,14 @@ public class ICE implements Listener {
             }
             switch (e.getCurrentItem().getType()) {
                 default:
+                    for (String key : Selector.getInstance().getSectionKeys()) {
+                        int sl = Selector.getInstance().getConfig().getInt("Servers."+key+".slot");
+                        String name = Selector.getInstance().getConfig().getString("Servers."+key+".name");
+                        if (e.getSlot()==sl) {
+                            Selector.getInstance().getSelected().put(p.getUniqueId(), name);
+                            break;
+                        }
+                    }
                     p.performCommand("ss");
                     p.closeInventory();
                     break;
