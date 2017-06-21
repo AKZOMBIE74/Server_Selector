@@ -12,6 +12,7 @@ public class PML implements PluginMessageListener{
 
     private int pc;
     private String[] pList;
+    private String serverip = null;
 
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!channel.equals("BungeeCord")) {
@@ -28,6 +29,10 @@ public class PML implements PluginMessageListener{
         } else if (subchannel.equals("PlayerList")){
             String server = in.readUTF(); // The name of the server you got the player list of, as given in args.
             pList = in.readUTF().split(", ");
+        } else if (subchannel.equals("ServerIP")) {
+            String servername = in.readUTF();
+            serverip = in.readUTF();
+            int port = in.readUnsignedShort();
         }
 
     }
@@ -38,5 +43,9 @@ public class PML implements PluginMessageListener{
 
     public String[] getPlayerList(){
         return pList;
+    }
+
+    public String getServerip() {
+        return serverip;
     }
 }
