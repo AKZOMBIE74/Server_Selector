@@ -22,9 +22,15 @@ public class PIE implements Listener {
         String name = ChatColor.translateAlternateColorCodes(
                 '&', Selector.getInstance().getConfig().getString("Compass.name"));
 
-        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK && p.getItemInHand().hasItemMeta()) {
-            if (p.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(name) && p.getItemInHand().getType() == PIE.x.getType()) {
-                Selector.getInstance().OpenGui(p);
+        if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (p.getItemInHand() != null) {
+                if (p.getItemInHand().hasItemMeta()) {
+                    if (p.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(name)){
+                        if (p.getItemInHand().getType() == PIE.x.getType()) {
+                            Selector.getInstance().OpenGui(p);
+                        }
+                    }
+                }
             }
         }
     }
