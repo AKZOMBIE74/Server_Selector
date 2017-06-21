@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,10 +14,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -24,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class Selector extends JavaPlugin{
     private Set<String> sectionKeys;
+    private HashMap<UUID, String> selected;
 
     private ByteArrayOutputStream b = new ByteArrayOutputStream();
     private DataOutputStream out = new DataOutputStream(b);
@@ -32,14 +31,19 @@ public class Selector extends JavaPlugin{
 
     private static PML pml = new PML();
 
+    private SCMD scmd;
+    private File file;
+
 
     //onEnable stuff
     @Override
     public void onEnable() {
         instance = this;
-
+        scmd = new SCMD();
         //Register Commands
-        getCommand("ss").setExecutor(new SCMD());
+        getCommand("ss").setExecutor(scmd);
+
+        selected = new HashMap<>();
 
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", getPML());
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -52,8 +56,15 @@ public class Selector extends JavaPlugin{
         //Create Config
         createConfig();
 
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
+        }
+
         //Enable Log
-        getLogger().info("Server Selector has been enabled");
+        getLogger().info("ServSel has been enabled");
     }
 
     public static PML getPML() {
@@ -63,10 +74,20 @@ public class Selector extends JavaPlugin{
     //onDisable stuff
     @Override
     public void onDisable() {
+        pml = null;
+        b = null;
+        out = null;
+        if (selected!=null && selected.size()>0) {
+            selected.clear();
+        }
+        if (sectionKeys!=null&&sectionKeys.size()>0) {
+            sectionKeys.clear();
+        }
+        sectionKeys = null;
+        selected = null;
+        scmd = null;
+        file = null;
         instance = null;
-
-        //Save Config
-        saveConfig();
         //Disable Log
         getLogger().info("Server Selector has been disabled");
     }
@@ -93,7 +114,7 @@ public class Selector extends JavaPlugin{
             if (!getDataFolder().exists()) {
                 getDataFolder().mkdirs();
             }
-            File file = new File(getDataFolder(), "config.yml");
+            file = new File(getDataFolder(), "config.yml");
             if (!file.exists()) {
                 getLogger().info("Config.yml not found, creating!");
                 saveDefaultConfig();
@@ -146,7 +167,8 @@ public class Selector extends JavaPlugin{
             if (sectionKeys != null) {
                 String displayName = getConfig().getString("Servers." + key + ".display-name");
                 String name = getConfig().getString("Servers." + key + ".name");
-                final List<String> lore = getConfig().getStringList("Servers." + key + ".lore");
+                List<String> lore = getConfig().getStringList("Servers." + key + ".lore");
+                List<String> finalLore = new ArrayList<>();
                 Boolean showcount = getConfig().getBoolean("Servers." + key + ".showcount");
                 Boolean playerList = getConfig().getBoolean("Servers."+key+".showPlayerList");
                 Material m = Material.valueOf(getConfig().getString("Servers." + key + ".Material"));
@@ -160,17 +182,27 @@ public class Selector extends JavaPlugin{
                     out.writeUTF("PlayerCount");
                     out.writeUTF(name);
                     Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
-                    lore.add("Players Online: "+ getPML().getPc());
+                    lore.add("Players Count: "+ getPML().getPc());
                 }
                 if (playerList){
                     out.writeUTF("PlayerList");
                     out.writeUTF(name);
                     Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
-                    lore.addAll(Arrays.asList(getPML().getPlayerList()));
+                    lore.add("Players Online: ");
+                    if (getPML().getPlayerList()!=null) {
+                        lore
+                                .addAll(
+                                        Arrays.asList(getPML().getPlayerList()));
+                    } else {
+                        lore.add("None");
+                    }
                 }
-
-                meta.setLore(lore);
-
+                lore.forEach(l -> {
+                    finalLore.add(ChatColor.translateAlternateColorCodes('&', l));
+                });
+                meta.setLore(finalLore);
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_PLACED_ON,
+                        ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
 
                 stack.setItemMeta(meta);
 
@@ -185,4 +217,7 @@ public class Selector extends JavaPlugin{
     }
 
 
+    public HashMap<UUID, String> getSelected() {
+        return selected;
+    }
 }
