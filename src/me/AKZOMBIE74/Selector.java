@@ -56,12 +56,6 @@ public class Selector extends JavaPlugin{
         //Create Config
         createConfig();
 
-        try {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        } catch (IOException e) {
-            // Failed to submit the stats :-(
-        }
 
         //Enable Log
         getLogger().info("ServSel has been enabled");
