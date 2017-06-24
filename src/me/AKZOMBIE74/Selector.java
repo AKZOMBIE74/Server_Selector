@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class Selector extends JavaPlugin{
     private Set<String> sectionKeys;
-    private HashMap<UUID, String> selected;
 
     private ByteArrayOutputStream b = new ByteArrayOutputStream();
     private DataOutputStream out = new DataOutputStream(b);
@@ -42,8 +41,6 @@ public class Selector extends JavaPlugin{
         scmd = new SCMD();
         //Register Commands
         getCommand("ss").setExecutor(scmd);
-
-        selected = new HashMap<>();
 
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", getPML());
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -71,14 +68,10 @@ public class Selector extends JavaPlugin{
         pml = null;
         b = null;
         out = null;
-        if (selected!=null && selected.size()>0) {
-            selected.clear();
-        }
         if (sectionKeys!=null&&sectionKeys.size()>0) {
             sectionKeys.clear();
         }
         sectionKeys = null;
-        selected = null;
         scmd = null;
         file = null;
         instance = null;
@@ -208,10 +201,5 @@ public class Selector extends JavaPlugin{
 
         player.openInventory(inv);
 
-    }
-
-
-    public HashMap<UUID, String> getSelected() {
-        return selected;
     }
 }
