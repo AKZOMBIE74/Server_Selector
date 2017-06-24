@@ -24,17 +24,10 @@ public class SCMD implements CommandExecutor {
 
         if (sender instanceof Player) {
             if (cmd.getName().equalsIgnoreCase("ss")) {
-                HashMap<UUID, String> selected = Selector.getInstance().getSelected();
-                if (selected.containsKey(p.getUniqueId()) && selected.get(p.getUniqueId())!=null){
-                    String name = selected.get(p.getUniqueId());
-                    selected.put(p.getUniqueId(), null);
-                    teleportServer(p, name);
-                } else {
-                    if (args.length>0){
+                if (args.length>0){
                         teleportServer(p, args[0]);
-                    } else {
+                } else {
                         help(p);
-                    }
                 }
             }
         } else {
