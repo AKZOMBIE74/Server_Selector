@@ -5,7 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by AKZOMBIE74 on 1/22/2016.
@@ -22,6 +24,10 @@ public class ICE implements Listener {
 
             if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR || !e.getCurrentItem().hasItemMeta()) {
                 p.closeInventory();
+                return;
+            }
+            if (e.getClick().isShiftClick()){
+                e.setCancelled(true);
                 return;
             }
             switch (e.getCurrentItem().getType()) {
