@@ -18,7 +18,7 @@ public class ICE implements Listener {
     public void clickI(InventoryClickEvent e) {
 
         if (e.getInventory().getName().equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', Selector.getInstance().getConfig().getString("menu_name")))) {
-
+            String name = null;
             Player p = (Player) e.getWhoClicked();
 
 
@@ -34,13 +34,12 @@ public class ICE implements Listener {
                 default:
                     for (String key : Selector.getInstance().getSectionKeys()) {
                         int sl = Selector.getInstance().getConfig().getInt("Servers."+key+".slot");
-                        String name = Selector.getInstance().getConfig().getString("Servers."+key+".name");
                         if (e.getSlot()==sl) {
-                            Selector.getInstance().getSelected().put(p.getUniqueId(), name);
+                            name = Selector.getInstance().getConfig().getString("Servers."+key+".name");
                             break;
                         }
                     }
-                    p.performCommand("ss");
+                    p.performCommand("ss "+name);
                     p.closeInventory();
                     break;
             }
