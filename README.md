@@ -5,7 +5,7 @@ The commits you see made by "invalid-email-address"are commits being pushed from
 
 Config.yml (Supports Color Codes!)
 ======
-
+[Link to my example config.yml](https://github.com/AKZOMBIE74/Server_Selector/blob/master/src/config.yml)
 
 Lang.yml (Supports Color Codes!)
 ======
