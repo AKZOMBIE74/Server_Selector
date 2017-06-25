@@ -1,17 +1,17 @@
-# My example config 
-Servers:
-  server1:
-    Material: COMPASS
-    slot: 1
-    name: server name here
-    display-name: Minigames!
-    showcount: false
-    lore:
+# My example config
+Servers: #Every server that will show up in the inventory will go below this.
+  server1: #To add a new server, just do server# and replace # with whatever number you are on.
+    Material: COMPASS #For materials, refer to this link https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+    slot: 1 #The slots are 0 indexed. This means 0 is actually 1st in the inventory and 1 is the 2nd and so on.
+    name: server name here #The official name of the server. This can be found in the Bungeecord's server config.yml.
+    display-name: Minigames! #This is just to make it appealing to players. By the way, this does support color codes.
+    showcount: false #This will only have two values, true or false. If true, it will display the number of players online.
+    lore: #This is just to give the user of this plugin more customization options. This also supports color codes.
     - "&4Go"
     - "&3To"
     - "&4this server!"
-    showPlayerList: true
-  server2:
+    showPlayerList: true #In the lore of this server's item, it will display the names of the players connected.
+  server2: #If you wanted to add another server, it would be server3.
     Material: GOLD_SWORD
     slot: 2
     name: ser
@@ -22,7 +22,7 @@ Servers:
     - To
     - this server!
     showPlayerList: true
-  server3:
+  server3: #If you wanted to display another server, it would be server 4.
     Material: COMPASS
     slot: 3
     name: sers
@@ -33,11 +33,11 @@ Servers:
     - To
     - this server!
     showPlayerList: true
-slot_size: 9
-menu_name: '&bServer Selector'
-Compass:
-  name: '&bNameHere'
-  lore:
+slot_size: 9 #Size of the inventory, must be multiples of 9. This number can go up to 54. It can go up more but it would be buggy.
+menu_name: '&bServer Selector' #Inventory name
+Compass: #A player receives this when they join. At the moment you cannot change the item type.
+  name: '&bNameHere' #Name of the compass the player recieves.
+  lore: #More customization options. No color codes for this lore, yet.
   - Right Click
   - To Open the
   - GUI
