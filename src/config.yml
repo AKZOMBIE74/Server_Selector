@@ -17,8 +17,8 @@ Servers: #Every server that will show up in the inventory will go below this.
     name: ser
     display-name: Mini!
     showcount: false
-    lore:
-    - Go
+    lore: #To allow for color codes, add quotation marks and add the color code like the first one in this lore list.
+    - "&cGo"
     - To
     - this server!
     showPlayerList: true
