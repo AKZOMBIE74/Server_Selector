@@ -33,15 +33,33 @@ public class Selector extends JavaPlugin{
     private SCMD scmd;
     private File file;
 
+    private IConfig lang;
+
+    public String SERVER_NOT_FOUND;
+    public String TELEPORTED;
+    public String ONLY_PLAYERS;
+
 
     //onEnable stuff
     @Override
     public void onEnable() {
         instance = this;
         scmd = new SCMD();
+        lang = new IConfig(instance, "lang.yml");
+
+        if (!(getLang().isString("server-not-found-message")
+                && getLang().isString("teleported-message")
+                && getLang().isString("only-players-message"))) {
+            writeExampleLang();
+        }
+
+        //Set String Variables
+        SERVER_NOT_FOUND = getLang().getColored("server-not-found-message"); //Placeholders: %pn = player name, %s = server name, %pdn = player display name
+        TELEPORTED = getLang().getColored("teleported-message");//Placeholders: %pn = player name, %s = server name, %pds = player display name
+        ONLY_PLAYERS = getLang().getColored("only-players-message");
+
         //Register Commands
         getCommand("ss").setExecutor(scmd);
-
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", getPML());
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
@@ -141,6 +159,13 @@ public class Selector extends JavaPlugin{
 
     }
 
+    private void writeExampleLang(){
+        getLang().set("server-not-found-message", "&cServer, %s, not found for player %pdn");
+        getLang().set("teleported-message", "&aSuccessfully teleported %pn to %s");
+        getLang().set("only-players-message", "Only players may use this command");
+        getLang().save();
+    }
+
 
     public void OpenGui(Player player) throws IOException {
         Inventory inv = Bukkit.createInventory(null, getConfig().getInt("slot_size"), ChatColor.translateAlternateColorCodes('&', getConfig().getString("menu_name")));
@@ -201,5 +226,9 @@ public class Selector extends JavaPlugin{
 
         player.openInventory(inv);
 
+    }
+
+    public IConfig getLang(){
+        return lang;
     }
 }
