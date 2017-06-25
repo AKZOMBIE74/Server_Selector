@@ -5,7 +5,7 @@ The commits you see made by "invalid-email-address"are commits being pushed from
 
 Config.yml (Supports Color Codes!)
 ======
-[Link to my example config.yml (contains tutorial)](https://github.com/AKZOMBIE74/Server_Selector/blob/master/src/config.yml)
+[Link to my example config.yml (contains tutorial)](/src/config.yml)
 
 Lang.yml (Supports Color Codes!)
 ======
@@ -20,3 +20,7 @@ Lang.yml (Supports Color Codes!)
     + %s - Displays the server name
   + only-players-message
     + **_None Exist!_**
+    
+Command
+======
+  +/ss [server name] - Allows player executing command to connect to specified server.
