@@ -1,0 +1,43 @@
+# My example config 
+Servers:
+  server1:
+    Material: COMPASS
+    slot: 1
+    name: server name here
+    display-name: Minigames!
+    showcount: false
+    lore:
+    - "&4Go"
+    - "&3To"
+    - "&4this server!"
+    showPlayerList: true
+  server2:
+    Material: GOLD_SWORD
+    slot: 2
+    name: ser
+    display-name: Mini!
+    showcount: false
+    lore:
+    - Go
+    - To
+    - this server!
+    showPlayerList: true
+  server3:
+    Material: COMPASS
+    slot: 3
+    name: sers
+    display-name: Mini!
+    showcount: false
+    lore:
+    - Go
+    - To
+    - this server!
+    showPlayerList: true
+slot_size: 9
+menu_name: '&bServer Selector'
+Compass:
+  name: '&bNameHere'
+  lore:
+  - Right Click
+  - To Open the
+  - GUI
