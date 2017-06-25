@@ -9,7 +9,7 @@ Config.yml (Supports Color Codes!)
 
 Lang.yml (Supports Color Codes!)
 ======
-  Placeholders
+  **Placeholders:**
   + server-not-found-message
     + %pn - Displays the teleporting player's name.
     + %pdn - Displays the teleporting player's display name.
