@@ -3,6 +3,12 @@ This plugin lets you select servers connected to your Bungeecord server.
 All of this plugin was written by me.
 The commits you see made by "invalid-email-address"are commits being pushed from my Intellij IDE and those commits are being pushed by me :).
 
+How To Install
+======
+1. Download the plugin from either https://www.spigotmc.org/resources/servsel.14485/ or https://dev.bukkit.org/projects/server-selector
+2. Put the plugin in your servers "plugins" folder.
+3. You are done. Now you can just start the server and hopefully enjoy this plugin.
+
 Config.yml (Supports Color Codes!)
 ======
 [My example config.yml (contains tutorial)](/src/config.yml)
