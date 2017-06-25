@@ -31,7 +31,7 @@ public class SCMD implements CommandExecutor {
                 }
             }
         } else {
-            System.out.print("Only players may use this command");
+            System.out.print(Selector.getInstance().ONLY_PLAYERS);
         }
         return false;
     }
@@ -50,9 +50,11 @@ public class SCMD implements CommandExecutor {
 
         p.sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
         if (serverExists(server)) {
-            p.sendMessage(ChatColor.GREEN + "Successfully teleported to " + server);
+            p.sendMessage(Selector.getInstance().TELEPORTED.replaceAll("%pn", p.getName()).replaceAll("%s", server)
+                    .replaceAll("%pdn", p.getDisplayName()));
         } else {
-            p.sendMessage(ChatColor.RED+"Server not found");
+            p.sendMessage(Selector.getInstance().SERVER_NOT_FOUND.replaceAll("%pn", p.getName()).replaceAll("%s", server)
+                    .replaceAll("%pdn", p.getDisplayName()));
         }
 
     }
