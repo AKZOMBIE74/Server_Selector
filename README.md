@@ -5,10 +5,12 @@ The commits you see made by "invalid-email-address"are commits being pushed from
 
 Config.yml (Supports Color Codes!)
 ======
-[Link to my example config.yml (contains tutorial)](/src/config.yml)
+[My example config.yml (contains tutorial)](/src/config.yml)
 
 Lang.yml (Supports Color Codes!)
 ======
+  [Default lang.yml](/src/lang.yml)
+  
   **Placeholders:**
   + server-not-found-message
     + %pn - Displays the teleporting player's name.
