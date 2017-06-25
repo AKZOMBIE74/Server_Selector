@@ -23,4 +23,4 @@ Lang.yml (Supports Color Codes!)
     
 Command
 ======
-  +/ss [server name] - Allows player executing command to connect to specified server.
+  +/ss [server name] - Allows the player executing the command to connect to the specified server.
