@@ -1,6 +1,6 @@
 name: Server_Selector
-version: 2.1.8
+version: 2.2
 main: me.AKZOMBIE74.Selector
 commands:
   ss:
-    description: Allows a player to connect to a server.
+    description: Allows the player executing the command to connect to the specified server.
