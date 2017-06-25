@@ -1,0 +1,4 @@
+# Default lang.yml
+server-not-found-message: '&cServer, %s, not found for player %pdn'
+teleported-message: '&aSuccessfully teleported %pn to %s'
+only-players-message: Only players may use this command
