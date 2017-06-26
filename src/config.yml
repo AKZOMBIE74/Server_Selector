@@ -15,13 +15,13 @@ Servers: #Every server that will show up in the inventory will go below this.
     Material: GOLD_SWORD
     slot: 2
     name: ser
-    display-name: Mini!
+    display-name: "&cMini!" #To be able to color, add quotation marks around and add the color code.
     showcount: false
     lore: #To allow for color codes, add quotation marks and add the color code like the first one in this lore list.
     - "&cGo"
     - To
     - this server!
-    showPlayerList: true
+    showPlayerList: false
   server3: #If you wanted to display another server, it would be server 4.
     Material: COMPASS
     slot: 3
