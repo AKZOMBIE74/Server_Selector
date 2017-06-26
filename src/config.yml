@@ -3,7 +3,7 @@ Servers: #Every server that will show up in the inventory will go below this.
   server1: #To add a new server, just do server# and replace # with whatever number you are on.
     Material: COMPASS #For materials, refer to this link https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
     slot: 1 #The slots are 0 indexed. This means 0 is actually 1st in the inventory and 1 is the 2nd and so on.
-    name: server name here #The official name of the server. This can be found in the Bungeecord's server config.yml.
+    name: server name here #The official name of the server. This can be found in the Bungeecord server's config.yml.
     display-name: Minigames! #This is just to make it appealing to players. By the way, this does support color codes.
     showcount: false #This will only have two values, true or false. If true, it will display the number of players online.
     lore: #This is just to give the user of this plugin more customization options. This also supports color codes.
