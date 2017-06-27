@@ -39,7 +39,7 @@ public class Selector extends JavaPlugin{
     private IConfig lang;
 
     String SERVER_NOT_FOUND, TELEPORTED, ONLY_PLAYERS, VERSION,
-    CURRENT_VERSION;
+    CURRENT_VERSION, CHANGELOG;
 
     Boolean shouldUpdate = false;
 
@@ -80,10 +80,14 @@ public class Selector extends JavaPlugin{
         ONLY_PLAYERS = getLang().getColored("only-players-message");
         CURRENT_VERSION = getInstance().getDescription().getVersion();
         if (getLang().getBoolean("show-update-message")) {
-            String SERVER = "https://private-8f513b-myspigotpluginupdates.apiary-mock.com/questions";
-            VERSION = connectToVersion(SERVER).split(",")[0].split(":")[1]
-                    .replaceAll(" ", "")
-                    .replaceAll("\"", "");
+            String VersionAndChangelog = connectToVersion(
+                    "https://private-8f513b-myspigotpluginupdates.apiary-mock.com/questions").split(",")[0]
+                    .replaceAll("\"", ""); //ServSel:Version:Changelog
+            VERSION = VersionAndChangelog.split(":")[1]
+                    .replaceAll(" ", "");//Version
+            CHANGELOG = VersionAndChangelog.split(":")[2];//Changelog
+            getLogger().info(VERSION);
+            getLogger().info(CHANGELOG);
             //Set boolean variable
             shouldUpdate = versionCompare(CURRENT_VERSION, VERSION) < 0;
         }
