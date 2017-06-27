@@ -10,11 +10,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -35,9 +38,10 @@ public class Selector extends JavaPlugin{
 
     private IConfig lang;
 
-    public String SERVER_NOT_FOUND;
-    public String TELEPORTED;
-    public String ONLY_PLAYERS;
+    String SERVER_NOT_FOUND, TELEPORTED, ONLY_PLAYERS, VERSION,
+    CURRENT_VERSION;
+
+    Boolean shouldUpdate = false;
 
 
     //onEnable stuff
@@ -45,18 +49,19 @@ public class Selector extends JavaPlugin{
     public void onEnable() {
         instance = this;
         scmd = new SCMD();
+
+        //Create Files
+        createConfig();
+        getLogger().info("Loading lang.yml");
         lang = new IConfig(instance, "lang.yml");
 
         if (!(getLang().isString("server-not-found-message")
                 && getLang().isString("teleported-message")
-                && getLang().isString("only-players-message"))) {
+                && getLang().isString("only-players-message")
+                && getLang().isBoolean("show-update-message"))) {
             writeExampleLang();
         }
-
-        //Set String Variables
-        SERVER_NOT_FOUND = getLang().getColored("server-not-found-message"); //Placeholders: %pn = player name, %s = server name, %pdn = player display name
-        TELEPORTED = getLang().getColored("teleported-message");//Placeholders: %pn = player name, %s = server name, %pds = player display name
-        ONLY_PLAYERS = getLang().getColored("only-players-message");
+        getLogger().info("Finished loading lang.yml");
 
         //Register Commands
         getCommand("ss").setExecutor(scmd);
@@ -68,9 +73,20 @@ public class Selector extends JavaPlugin{
         Bukkit.getServer().getPluginManager().registerEvents(new ICE(), this);
         Bukkit.getServer().getPluginManager().registerEvents(new PJE(), this);
 
-        //Create Config
-        createConfig();
 
+        //Set String Variables
+        SERVER_NOT_FOUND = getLang().getColored("server-not-found-message"); //Placeholders: %pn = player name, %s = server name, %pdn = player display name
+        TELEPORTED = getLang().getColored("teleported-message");//Placeholders: %pn = player name, %s = server name, %pds = player display name
+        ONLY_PLAYERS = getLang().getColored("only-players-message");
+        CURRENT_VERSION = getInstance().getDescription().getVersion();
+        if (getLang().getBoolean("show-update-message")) {
+            String SERVER = "https://private-8f513b-myspigotpluginupdates.apiary-mock.com/questions";
+            VERSION = connectToVersion(SERVER).split(",")[0].split(":")[1]
+                    .replaceAll(" ", "")
+                    .replaceAll("\"", "");
+            //Set boolean variable
+            shouldUpdate = versionCompare(CURRENT_VERSION, VERSION) < 0;
+        }
 
         //Enable Log
         getLogger().info("ServSel has been enabled");
@@ -160,9 +176,18 @@ public class Selector extends JavaPlugin{
     }
 
     private void writeExampleLang(){
-        getLang().set("server-not-found-message", "&cServer, %s, not found for player %pdn");
-        getLang().set("teleported-message", "&aSuccessfully teleported %pn to %s");
-        getLang().set("only-players-message", "Only players may use this command");
+        if (!getLang().isString("server-not-found-message")) {
+            getLang().set("server-not-found-message", "&cServer, %s, not found for player %pdn");
+        }
+        if (!getLang().isString("teleported-message")) {
+            getLang().set("teleported-message", "&aSuccessfully teleported %pn to %s");
+        }
+        if (!getLang().isString("only-players-message")) {
+            getLang().set("only-players-message", "Only players may use this command");
+        }
+        if (!getLang().isBoolean("show-update-message")) {
+            getLang().set("show-update-message", true);
+        }
         getLang().save();
     }
 
@@ -230,5 +255,62 @@ public class Selector extends JavaPlugin{
 
     public IConfig getLang(){
         return lang;
+    }
+
+    private String connectToVersion(String server){
+        URL uri= null;
+        try {
+            uri = new URL(server);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            URLConnection ec = uri.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(
+                    ec.getInputStream(), "UTF-8"));
+            String inputLine;
+            StringBuilder a = new StringBuilder();
+            while ((inputLine = in.readLine()) != null)
+                a.append(inputLine);
+
+            in.close();
+            return a.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * Compares two version strings.
+     *
+     * Use this instead of String.compareTo() for a non-lexicographical
+     * comparison that works for version strings. e.g. "1.10".compareTo("1.6").
+     *
+     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
+     *
+     * @param str1 a string of ordinal numbers separated by decimal points.
+     * @param str2 a string of ordinal numbers separated by decimal points.
+     * @return The result is a negative integer if str1 is _numerically_ less than str2.
+     *         The result is a positive integer if str1 is _numerically_ greater than str2.
+     *         The result is zero if the strings are _numerically_ equal.
+     */
+    public static int versionCompare(String str1, String str2) {
+        String[] vals1 = str1.split("\\.");
+        String[] vals2 = str2.split("\\.");
+        int i = 0;
+        // set index to first non-equal ordinal or length of shortest version string
+        while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
+            i++;
+        }
+        // compare first non-equal ordinal number
+        if (i < vals1.length && i < vals2.length) {
+            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+            return Integer.signum(diff);
+        }
+        // the strings are equal or one string is a substring of the other
+        // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
+        return Integer.signum(vals1.length - vals2.length);
     }
 }
