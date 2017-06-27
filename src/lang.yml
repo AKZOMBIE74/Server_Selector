@@ -2,4 +2,4 @@
 server-not-found-message: '&cServer, %s, not found for player %pdn'
 teleported-message: '&aSuccessfully teleported %pn to %s'
 only-players-message: Only players may use this command
-show-update-message: true
+show-update-message: true #This takes in a boolean value to enable/disable version checking. "true" to enable and "false" to disable.
