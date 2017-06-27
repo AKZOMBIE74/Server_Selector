@@ -63,6 +63,7 @@ public class SCMD implements CommandExecutor {
         p.sendMessage(ChatColor.BLUE+"/ss <server> - Teleports you to the specified server");
         if (Selector.getInstance().shouldUpdate){
             p.sendMessage(ChatColor.DARK_RED+"It is recommended you update to version "+Selector.getInstance().VERSION);
+            p.sendMessage(ChatColor.YELLOW+Selector.getInstance().CHANGELOG);
         }
     }
     public boolean serverExists(String server){
