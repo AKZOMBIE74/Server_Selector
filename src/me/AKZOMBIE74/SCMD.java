@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
 
 /**
  * Created by AKZOMBIE74 on 1/22/2016.
@@ -61,8 +59,11 @@ public class SCMD implements CommandExecutor {
     public void help(Player p){
         p.sendMessage(ChatColor.GOLD+"=====ServSel=====");
         p.sendMessage(ChatColor.GREEN+"By: AKZOMBIE74");
-        p.sendMessage(ChatColor.AQUA+"Version: "+Selector.getInstance().getDescription().getVersion());
+        p.sendMessage(ChatColor.AQUA+"Version: "+Selector.getInstance().CURRENT_VERSION);
         p.sendMessage(ChatColor.BLUE+"/ss <server> - Teleports you to the specified server");
+        if (Selector.getInstance().shouldUpdate){
+            p.sendMessage(ChatColor.DARK_RED+"It is recommended you update to version "+Selector.getInstance().VERSION);
+        }
     }
     public boolean serverExists(String server){
         ByteArrayOutputStream b = new ByteArrayOutputStream();
