@@ -28,6 +28,8 @@ Lang.yml (Supports Color Codes!)
     + %s - Displays the server name
   + only-players-message
     + **_None Exist!_**
+  + show-update-message
+    + **_None Exist!_**
     
 Command
 ======
