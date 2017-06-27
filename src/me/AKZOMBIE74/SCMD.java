@@ -20,18 +20,18 @@ public class SCMD implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-        Player p = (Player) sender;
 
-        if (sender instanceof Player) {
-            if (cmd.getName().equalsIgnoreCase("ss")) {
+        if (cmd.getName().equalsIgnoreCase("ss")) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
                 if (args.length>0){
-                        teleportServer(p, args[0]);
+                    teleportServer(p, args[0]);
                 } else {
-                        help(p);
+                    help(p);
                 }
+            } else {
+                sender.sendMessage(Selector.getInstance().ONLY_PLAYERS);
             }
-        } else {
-            System.out.print(Selector.getInstance().ONLY_PLAYERS);
         }
         return false;
     }
