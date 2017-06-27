@@ -86,8 +86,6 @@ public class Selector extends JavaPlugin{
             VERSION = VersionAndChangelog.split(":")[1]
                     .replaceAll(" ", "");//Version
             CHANGELOG = VersionAndChangelog.split(":")[2];//Changelog
-            getLogger().info(VERSION);
-            getLogger().info(CHANGELOG);
             //Set boolean variable
             shouldUpdate = versionCompare(CURRENT_VERSION, VERSION) < 0;
         }
