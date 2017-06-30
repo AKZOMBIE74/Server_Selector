@@ -79,12 +79,10 @@ public class Selector extends JavaPlugin{
 
         //Set String Variables
         setLangVars();
+        CURRENT_VERSION = getInstance().getDescription().getVersion();
 
         //Fill serverData
         checkForServers();
-
-        //Check for updates
-        checkForUpdates();
 
         //Enable Log
         getLogger().info("ServSel has been enabled");
@@ -262,7 +260,6 @@ public class Selector extends JavaPlugin{
     }
 
     public void checkForUpdates(){
-        CURRENT_VERSION = getInstance().getDescription().getVersion();
         if (getLang().getBoolean("show-update-message")) {
             String VersionAndChangelog = connectToVersion(
                     "https://private-8f513b-myspigotpluginupdates.apiary-mock.com/questions").split(",")[0]
