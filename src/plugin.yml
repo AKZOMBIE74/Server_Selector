@@ -1,6 +1,8 @@
 name: Server_Selector
-version: 2.2.3
+version: 2.2.4
 main: me.AKZOMBIE74.Selector
 commands:
   ss:
     description: Allows the player executing the command to connect to the specified server.
+  ssr:
+    description: Reloads ServSel's files
