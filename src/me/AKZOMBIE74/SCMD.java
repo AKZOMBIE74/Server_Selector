@@ -67,6 +67,7 @@ public class SCMD implements CommandExecutor {
         p.sendMessage(ChatColor.AQUA+"Version: "+Selector.getInstance().CURRENT_VERSION);
         p.sendMessage(ChatColor.BLUE+"/ss <server> - Teleports you to the specified server");
         p.sendMessage(ChatColor.BLUE+"/ssr - Reloads ServSel");
+        Selector.getInstance().checkForUpdates();
         if (Selector.getInstance().shouldUpdate){
             p.sendMessage(ChatColor.DARK_RED+"It is recommended you update to version "+Selector.getInstance().VERSION);
             p.sendMessage(ChatColor.YELLOW+Selector.getInstance().CHANGELOG);
