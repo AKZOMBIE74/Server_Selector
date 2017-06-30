@@ -11,14 +11,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by AKZOMBIE74 on 11/11/2015.
@@ -38,6 +35,8 @@ public class Selector extends JavaPlugin{
 
     private IConfig lang;
 
+    private ArrayList<ServerData> serverData;
+
     String SERVER_NOT_FOUND, TELEPORTED, ONLY_PLAYERS, VERSION,
     CURRENT_VERSION, CHANGELOG;
 
@@ -49,6 +48,9 @@ public class Selector extends JavaPlugin{
     public void onEnable() {
         instance = this;
         scmd = new SCMD();
+
+        //Make arraylist to store all servers
+        serverData = new ArrayList<>();
 
         //Create Files
         createConfig();
@@ -65,6 +67,7 @@ public class Selector extends JavaPlugin{
 
         //Register Commands
         getCommand("ss").setExecutor(scmd);
+        getCommand("ssr").setExecutor(scmd);
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", getPML());
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
@@ -75,20 +78,13 @@ public class Selector extends JavaPlugin{
 
 
         //Set String Variables
-        SERVER_NOT_FOUND = getLang().getColored("server-not-found-message"); //Placeholders: %pn = player name, %s = server name, %pdn = player display name
-        TELEPORTED = getLang().getColored("teleported-message");//Placeholders: %pn = player name, %s = server name, %pds = player display name
-        ONLY_PLAYERS = getLang().getColored("only-players-message");
-        CURRENT_VERSION = getInstance().getDescription().getVersion();
-        if (getLang().getBoolean("show-update-message")) {
-            String VersionAndChangelog = connectToVersion(
-                    "https://private-8f513b-myspigotpluginupdates.apiary-mock.com/questions").split(",")[0]
-                    .replaceAll("\"", ""); //ServSel:Version:Changelog
-            VERSION = VersionAndChangelog.split(":")[1]
-                    .replaceAll(" ", "");//Version
-            CHANGELOG = VersionAndChangelog.split(":")[2];//Changelog
-            //Set boolean variable
-            shouldUpdate = versionCompare(CURRENT_VERSION, VERSION) < 0;
-        }
+        setLangVars();
+
+        //Fill serverData
+        checkForServers();
+
+        //Check for updates
+        checkForUpdates();
 
         //Enable Log
         getLogger().info("ServSel has been enabled");
@@ -110,6 +106,8 @@ public class Selector extends JavaPlugin{
         sectionKeys = null;
         scmd = null;
         file = null;
+        serverData.clear();
+        serverData = null;
         instance = null;
         //Disable Log
         getLogger().info("Server Selector has been disabled");
@@ -196,63 +194,14 @@ public class Selector extends JavaPlugin{
 
     public void OpenGui(Player player) throws IOException {
         Inventory inv = Bukkit.createInventory(null, getConfig().getInt("slot_size"), ChatColor.translateAlternateColorCodes('&', getConfig().getString("menu_name")));
-
-        sectionKeys = getConfig().getConfigurationSection("Servers").getKeys(false);
-
-        AtomicReference<ArrayList<ItemStack>> items = new AtomicReference<>(new ArrayList<ItemStack>(sectionKeys.size()));
-
-
-        for (String key : sectionKeys) {
-            if (sectionKeys != null) {
-                String displayName = getConfig().getString("Servers." + key + ".display-name");
-                String name = getConfig().getString("Servers." + key + ".name");
-                List<String> lore = getConfig().getStringList("Servers." + key + ".lore");
-                List<String> finalLore = new ArrayList<>();
-                Boolean showcount = getConfig().getBoolean("Servers." + key + ".showcount");
-                Boolean playerList = getConfig().getBoolean("Servers."+key+".showPlayerList");
-                Material m = Material.valueOf(getConfig().getString("Servers." + key + ".Material"));
-
-                ItemStack stack = new ItemStack(m, 1);
-
-                ItemMeta meta = stack.getItemMeta();
-                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
-                if (showcount) {
-
-                    out.writeUTF("PlayerCount");
-                    out.writeUTF(name);
-                    Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
-                    lore.add("Players Count: "+ getPML().getPc());
-                }
-                if (playerList){
-                    out.writeUTF("PlayerList");
-                    out.writeUTF(name);
-                    Bukkit.getServer().sendPluginMessage(this, "BungeeCord", b.toByteArray());
-                    lore.add("Players Online: ");
-                    if (getPML().getPlayerList()!=null) {
-                        lore
-                                .addAll(
-                                        Arrays.asList(getPML().getPlayerList()));
-                    } else {
-                        lore.add("None");
-                    }
-                }
-                lore.forEach(l -> {
-                    finalLore.add(ChatColor.translateAlternateColorCodes('&', l));
-                });
-                meta.setLore(finalLore);
-                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_PLACED_ON,
-                        ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
-
-                stack.setItemMeta(meta);
-
-                items.get().add(stack);
-                inv.setItem(getConfig().getInt("Servers." + key + ".slot"), stack);
+        if (serverData != null && serverData.size()>0) {
+            for (ServerData server : serverData) {
+                server.callShowCount();
+                server.callPlayerList();
+                inv.setItem(server.getSlot(), server.getStack());
             }
         }
-
-
         player.openInventory(inv);
-
     }
 
     public IConfig getLang(){
@@ -260,13 +209,9 @@ public class Selector extends JavaPlugin{
     }
 
     private String connectToVersion(String server){
-        URL uri= null;
+        URL uri;
         try {
             uri = new URL(server);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
             URLConnection ec = uri.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     ec.getInputStream(), "UTF-8"));
@@ -314,5 +259,54 @@ public class Selector extends JavaPlugin{
         // the strings are equal or one string is a substring of the other
         // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
         return Integer.signum(vals1.length - vals2.length);
+    }
+
+    public void checkForUpdates(){
+        CURRENT_VERSION = getInstance().getDescription().getVersion();
+        if (getLang().getBoolean("show-update-message")) {
+            String VersionAndChangelog = connectToVersion(
+                    "https://private-8f513b-myspigotpluginupdates.apiary-mock.com/questions").split(",")[0]
+                    .replaceAll("\"", ""); //ServSel:Version:Changelog
+            VERSION = VersionAndChangelog.split(":")[1]
+                    .replaceAll(" ", "");//Version
+            CHANGELOG = VersionAndChangelog.split(":")[2];//Changelog
+            //Set boolean variable
+            shouldUpdate = versionCompare(CURRENT_VERSION, VERSION) < 0;
+        }
+    }
+
+    public void setLangVars(){
+        getLang().reload();
+        SERVER_NOT_FOUND = getLang().getColored("server-not-found-message"); //Placeholders: %pn = player name, %s = server name, %pdn = player display name
+        TELEPORTED = getLang().getColored("teleported-message");//Placeholders: %pn = player name, %s = server name, %pds = player display name
+        ONLY_PLAYERS = getLang().getColored("only-players-message");
+    }
+
+    public void checkForServers(){
+        serverData.clear();
+        reloadConfig();
+        sectionKeys = getConfig().getConfigurationSection("Servers").getKeys(false);
+
+        for (String key : sectionKeys) {
+            if (sectionKeys != null) {
+                String displayName = getConfig().getString("Servers." + key + ".display-name");
+                String name = getConfig().getString("Servers." + key + ".name");
+                List<String> lore = getConfig().getStringList("Servers." + key + ".lore");
+                boolean showcount = getConfig().getBoolean("Servers." + key + ".showcount");
+                boolean playerList = getConfig().getBoolean("Servers."+key+".showPlayerList");
+                Material m = Material.valueOf(getConfig().getString("Servers." + key + ".Material"));
+
+                ItemStack stack = new ItemStack(m, 1);
+
+                ItemMeta meta = stack.getItemMeta();
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
+                meta.setLore(lore);
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_PLACED_ON,
+                        ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
+
+                serverData.add(new ServerData(meta, getConfig().getInt("Servers." + key + ".slot"),
+                        showcount, playerList, m, name));
+            }
+        }
     }
 }
