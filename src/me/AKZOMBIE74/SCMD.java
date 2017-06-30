@@ -30,6 +30,11 @@ public class SCMD implements CommandExecutor {
             } else {
                 sender.sendMessage(Selector.getInstance().ONLY_PLAYERS);
             }
+        } else if (cmd.getName().equalsIgnoreCase("ssr")){
+            Selector.getInstance().checkForServers();
+            Selector.getInstance().setLangVars();
+            //Selector.getInstance().checkForUpdates();
+            sender.sendMessage(ChatColor.GREEN+"Successfully reloaded ServSel!");
         }
         return false;
     }
@@ -61,6 +66,7 @@ public class SCMD implements CommandExecutor {
         p.sendMessage(ChatColor.GREEN+"By: AKZOMBIE74");
         p.sendMessage(ChatColor.AQUA+"Version: "+Selector.getInstance().CURRENT_VERSION);
         p.sendMessage(ChatColor.BLUE+"/ss <server> - Teleports you to the specified server");
+        p.sendMessage(ChatColor.BLUE+"/ssr - Reloads ServSel");
         if (Selector.getInstance().shouldUpdate){
             p.sendMessage(ChatColor.DARK_RED+"It is recommended you update to version "+Selector.getInstance().VERSION);
             p.sendMessage(ChatColor.YELLOW+Selector.getInstance().CHANGELOG);
