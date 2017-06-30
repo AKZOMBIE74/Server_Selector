@@ -14,6 +14,7 @@ public class PML implements PluginMessageListener{
     private String[] pList;
     private String serverip = null;
 
+    @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (!channel.equals("BungeeCord")) {
             return;
@@ -37,6 +38,7 @@ public class PML implements PluginMessageListener{
 
     }
 
+    //PlayerCount
     public int getPc() {
         return pc;
     }
