@@ -31,7 +31,7 @@ Lang.yml (Supports Color Codes!)
   + show-update-message
     + **_None Exist!_**
     
-Command
+Commands
 ======
   + /ss [server name] - Allows the player executing the command to connect to the specified server.
   + /ssr - Reloads ServSel
