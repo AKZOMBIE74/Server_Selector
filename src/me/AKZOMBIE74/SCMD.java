@@ -26,6 +26,7 @@ public class SCMD implements CommandExecutor {
                     teleportServer(p, args[0]);
                 } else {
                     help(p);
+                    updateMessage(p);
                 }
             } else {
                 sender.sendMessage(Selector.getInstance().ONLY_PLAYERS);
@@ -33,7 +34,8 @@ public class SCMD implements CommandExecutor {
         } else if (cmd.getName().equalsIgnoreCase("ssr")){
             Selector.getInstance().checkForServers();
             Selector.getInstance().setLangVars();
-            //Selector.getInstance().checkForUpdates();
+            Selector.getInstance().checkForUpdates();
+            updateMessage(sender);
             sender.sendMessage(ChatColor.GREEN+"Successfully reloaded ServSel!");
         }
         return false;
@@ -68,8 +70,10 @@ public class SCMD implements CommandExecutor {
         p.sendMessage(ChatColor.BLUE+"/ss <server> - Teleports you to the specified server");
         p.sendMessage(ChatColor.BLUE+"/ssr - Reloads ServSel");
         Selector.getInstance().checkForUpdates();
+    }
+    public void updateMessage(CommandSender p) {
         if (Selector.getInstance().shouldUpdate){
-            p.sendMessage(ChatColor.DARK_RED+"It is recommended you update to version "+Selector.getInstance().VERSION);
+            p.sendMessage(ChatColor.DARK_RED+"[ServSel] It is recommended you update to version "+Selector.getInstance().VERSION);
             p.sendMessage(ChatColor.YELLOW+Selector.getInstance().CHANGELOG);
         }
     }
