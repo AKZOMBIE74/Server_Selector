@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +26,9 @@ public class Selector extends JavaPlugin{
 
     private ByteArrayOutputStream b = new ByteArrayOutputStream();
     private DataOutputStream out = new DataOutputStream(b);
+
+    private HashMap<String, Integer> playerCounts;
+    private HashMap<String, String[]> playerLists;
 
     private static Selector instance;
 
@@ -48,6 +52,8 @@ public class Selector extends JavaPlugin{
     public void onEnable() {
         instance = this;
         scmd = new SCMD();
+        playerCounts = new HashMap<>();
+        playerLists = new HashMap<>();
 
         //Make arraylist to store all servers
         serverData = new ArrayList<>();
@@ -102,6 +108,10 @@ public class Selector extends JavaPlugin{
             sectionKeys.clear();
         }
         sectionKeys = null;
+        playerCounts.clear();
+        playerCounts = null;
+        playerLists.clear();
+        playerLists = null;
         scmd = null;
         file = null;
         serverData.clear();
@@ -305,5 +315,16 @@ public class Selector extends JavaPlugin{
                         showcount, playerList, m, name));
             }
         }
+    }
+    public ArrayList<ServerData> getServerData(){
+        return serverData;
+    }
+
+    public HashMap<String, Integer> getPlayerCounts(){
+        return playerCounts;
+    }
+
+    public HashMap<String, String[]> getPlayerLists(){
+        return playerLists;
     }
 }
