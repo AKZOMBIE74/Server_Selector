@@ -10,8 +10,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
  */
 public class PML implements PluginMessageListener{
 
-    private int pc;
-    private String[] pList;
     private String serverip = null;
 
     @Override
@@ -26,10 +24,10 @@ public class PML implements PluginMessageListener{
             // Use the code sample in the 'Response' sections below to read
             // the data.
             String server = in.readUTF(); // Name of server, as given in the arguments
-            pc = in.readInt();
+            Selector.getInstance().getPlayerCounts().put(server, in.readInt());
         } else if (subchannel.equals("PlayerList")){
             String server = in.readUTF(); // The name of the server you got the player list of, as given in args.
-            pList = in.readUTF().split(", ");
+            Selector.getInstance().getPlayerLists().put(server, in.readUTF().split(", "));
         } else if (subchannel.equals("ServerIP")) {
             String servername = in.readUTF();
             serverip = in.readUTF();
@@ -38,14 +36,6 @@ public class PML implements PluginMessageListener{
 
     }
 
-    //PlayerCount
-    public int getPc() {
-        return pc;
-    }
-
-    public String[] getPlayerList(){
-        return pList;
-    }
 
     public String getServerip() {
         return serverip;
