@@ -31,7 +31,7 @@ public class SCMD implements CommandExecutor {
             } else {
                 sender.sendMessage(Selector.getInstance().ONLY_PLAYERS);
             }
-        } else if (cmd.getName().equalsIgnoreCase("ssr")){
+        } else if (cmd.getName().equalsIgnoreCase("ssr") && sender.hasPermission("servsel.reload")){
             Selector.getInstance().checkForServers();
             Selector.getInstance().setLangVars();
             Selector.getInstance().checkForUpdates();
