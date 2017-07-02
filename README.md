@@ -40,4 +40,4 @@ What info do I collect?
 ======
 If you set "show-update-message" in the lang.yml file to "true". Then whenever the plugin is checking for an update, it will ping my website to check for the update and upon that ping, the software I use shows me the IP of those who have pinged my website.
 
-I won't do anything bad with your IP address. Your IP address will be kept confidently.
+I won't do anything bad with your IP address. Your IP address will be kept confidently :smile:.
