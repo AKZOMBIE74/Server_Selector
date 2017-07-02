@@ -47,7 +47,12 @@ public class ServerData {
             } catch (IOException e){
                 e.printStackTrace();
             }
-            lore.add("Players Count: " + Selector.getPML().getPc());
+            if (Selector.getInstance().getPlayerCounts().containsKey(name)
+                    && Selector.getInstance().getPlayerCounts().get(name)!= null) {
+                lore.add("Players Count: " + Selector.getInstance().getPlayerCounts().get(name));
+            } else {
+                lore.add("Players Count: 0");
+            }
             itemMeta.setLore(lore);
         }
     }
@@ -65,10 +70,11 @@ public class ServerData {
                 e.printStackTrace();
             }
             lore.add("Players Online: ");
-            if (Selector.getPML().getPlayerList() != null) {
+            if (Selector.getInstance().getPlayerLists().containsKey(name)
+                    && Selector.getInstance().getPlayerLists().get(name).length>0) {
                 lore
                         .addAll(
-                                Arrays.asList(Selector.getPML().getPlayerList()));
+                                Arrays.asList(Selector.getInstance().getPlayerLists().get(name)));
             } else {
                 lore.add("None");
             }
