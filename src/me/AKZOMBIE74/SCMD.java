@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by AKZOMBIE74 on 1/22/2016.
@@ -77,22 +78,7 @@ public class SCMD implements CommandExecutor {
         }
     }
     public boolean serverExists(String server){
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            out.writeUTF("ServerIP");
-            out.writeUTF(server);
-            Selector.getInstance().getServer().sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (Selector.getInstance().getServerExists().containsKey(server)) {
-            if (Selector.getInstance().getServerExists().get(server) == null) {
-                Selector.getInstance().getServerExists().remove(server);
-                return false;
-            }
-            return true;
-        }
-        return false;
+        String servers = Arrays.toString(Selector.getInstance().getServerExists());
+        return servers.contains(server);
     }
 }
