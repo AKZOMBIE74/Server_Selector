@@ -29,7 +29,7 @@ public class Selector extends JavaPlugin{
 
     private HashMap<String, Integer> playerCounts;
     private HashMap<String, String[]> playerLists;
-    private HashMap<String, String> serverExists;
+    private String[] serverExists;
 
     private static Selector instance;
 
@@ -55,7 +55,6 @@ public class Selector extends JavaPlugin{
         scmd = new SCMD();
         playerCounts = new HashMap<>();
         playerLists = new HashMap<>();
-        serverExists = new HashMap<>();
 
         //Make arraylist to store all servers
         serverData = new ArrayList<>();
@@ -114,7 +113,6 @@ public class Selector extends JavaPlugin{
         playerCounts = null;
         playerLists.clear();
         playerLists = null;
-        serverExists.clear();
         serverExists = null;
         scmd = null;
         file = null;
@@ -298,6 +296,16 @@ public class Selector extends JavaPlugin{
         reloadConfig();
         sectionKeys = getConfig().getConfigurationSection("Servers").getKeys(false);
 
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(b);
+
+        try {
+            out.writeUTF("GetServers");
+            Selector.getInstance().getServer().sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
         for (String key : sectionKeys) {
             if (sectionKeys != null) {
                 String displayName = getConfig().getString("Servers." + key + ".display-name");
@@ -317,14 +325,10 @@ public class Selector extends JavaPlugin{
 
                 serverData.add(new ServerData(meta, getConfig().getInt("Servers." + key + ".slot"),
                         showcount, playerList, m, name));
-                serverExists.put(name, "1");
             }
         }
     }
-    public ArrayList<ServerData> getServerData(){
-        return serverData;
-    }
-
+    
     public HashMap<String, Integer> getPlayerCounts(){
         return playerCounts;
     }
@@ -333,7 +337,10 @@ public class Selector extends JavaPlugin{
         return playerLists;
     }
 
-    public HashMap<String, String> getServerExists(){
+    public String[] getServerExists(){
         return serverExists;
+    }
+    public void setServerExists(String[] s){
+        serverExists = s;
     }
 }
