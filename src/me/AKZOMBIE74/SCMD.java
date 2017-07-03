@@ -48,12 +48,11 @@ public class SCMD implements CommandExecutor {
         try {
             out.writeUTF("Connect");
             out.writeUTF(server);
+            p.sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
         } catch (IOException eee) {
             // Fehler
             eee.printStackTrace();
         }
-
-        p.sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
         if (serverExists(server)) {
             p.sendMessage(Selector.getInstance().TELEPORTED.replaceAll("%pn", p.getName()).replaceAll("%s", server)
                     .replaceAll("%pdn", p.getDisplayName()));
@@ -83,10 +82,17 @@ public class SCMD implements CommandExecutor {
         try {
             out.writeUTF("ServerIP");
             out.writeUTF(server);
+            Selector.getInstance().getServer().sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Selector.getInstance().getServer().sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
-        return Selector.getPML().getServerip() != null;
+        if (Selector.getInstance().getServerExists().containsKey(server)) {
+            if (Selector.getInstance().getServerExists().get(server) == null) {
+                Selector.getInstance().getServerExists().remove(server);
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 }
