@@ -1,5 +1,5 @@
 name: Server_Selector
-version: 2.2.7
+version: 2.2.9
 main: me.AKZOMBIE74.Selector
 commands:
   ss:
