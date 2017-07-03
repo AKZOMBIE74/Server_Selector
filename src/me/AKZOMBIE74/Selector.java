@@ -29,6 +29,7 @@ public class Selector extends JavaPlugin{
 
     private HashMap<String, Integer> playerCounts;
     private HashMap<String, String[]> playerLists;
+    private HashMap<String, String> serverExists;
 
     private static Selector instance;
 
@@ -54,6 +55,7 @@ public class Selector extends JavaPlugin{
         scmd = new SCMD();
         playerCounts = new HashMap<>();
         playerLists = new HashMap<>();
+        serverExists = new HashMap<>();
 
         //Make arraylist to store all servers
         serverData = new ArrayList<>();
@@ -112,6 +114,8 @@ public class Selector extends JavaPlugin{
         playerCounts = null;
         playerLists.clear();
         playerLists = null;
+        serverExists.clear();
+        serverExists = null;
         scmd = null;
         file = null;
         serverData.clear();
@@ -313,6 +317,7 @@ public class Selector extends JavaPlugin{
 
                 serverData.add(new ServerData(meta, getConfig().getInt("Servers." + key + ".slot"),
                         showcount, playerList, m, name));
+                serverExists.put(name, "1");
             }
         }
     }
@@ -326,5 +331,9 @@ public class Selector extends JavaPlugin{
 
     public HashMap<String, String[]> getPlayerLists(){
         return playerLists;
+    }
+
+    public HashMap<String, String> getServerExists(){
+        return serverExists;
     }
 }
