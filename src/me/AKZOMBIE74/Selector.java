@@ -74,6 +74,7 @@ public class Selector extends JavaPlugin{
 
         //Register Commands
         getCommand("ss").setExecutor(scmd);
+        getCommand("ss").setTabCompleter(new ServerTabCompleter());
         getCommand("ssr").setExecutor(scmd);
         Bukkit.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", getPML());
         Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -328,7 +329,7 @@ public class Selector extends JavaPlugin{
             }
         }
     }
-    
+
     public HashMap<String, Integer> getPlayerCounts(){
         return playerCounts;
     }
@@ -342,5 +343,9 @@ public class Selector extends JavaPlugin{
     }
     public void setServerExists(String[] s){
         serverExists = s;
+    }
+
+    public ArrayList<ServerData> getServerData(){
+        return serverData;
     }
 }
