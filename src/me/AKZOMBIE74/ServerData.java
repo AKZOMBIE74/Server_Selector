@@ -18,12 +18,12 @@ import java.util.List;
  * Created by AKZOMBIE74 on 6/30/2017.
  */
 public class ServerData {
-    private Material material;
-    private ItemMeta itemMeta;
-    private int slot;
-    private boolean showcount, playerList;
-    private String name;
-    private List<String> defaultLore;
+    private Material material;//What material this server should display as
+    private ItemMeta itemMeta;//The data that defines the material
+    private int slot;//Slot # for the server to show up int GUI
+    private boolean showcount, playerList; //showcount = # of players online, playerlist=names of players online
+    private String name;//Official server name
+    private List<String> defaultLore; //Lore from config
 
     ServerData(ItemMeta itemMeta, int slot, boolean showcount, boolean playerList, Material material, String name){
         this.itemMeta = itemMeta;
@@ -96,5 +96,9 @@ public class ServerData {
 
     public int getSlot() {
         return slot;
+    }
+
+    public String getName(){
+        return name;
     }
 }
