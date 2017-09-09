@@ -51,7 +51,7 @@ public class SCMD implements CommandExecutor {
             out.writeUTF(server);
             p.sendPluginMessage(Selector.getInstance(), "BungeeCord", b.toByteArray());
         } catch (IOException eee) {
-            // Fehler
+            //Failure
             eee.printStackTrace();
         }
         if (serverExists(server)) {
