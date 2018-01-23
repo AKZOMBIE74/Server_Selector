@@ -6,7 +6,7 @@ The commits you see made by "invalid-email-address"are commits being pushed from
 How To Install
 ======
 1. Download the plugin from either [Spigot](https://www.spigotmc.org/resources/servsel.14485/) or [Bukkit](https://dev.bukkit.org/projects/server-selector). There is no difference.
-2. Put the plugin in your server's "plugins" folder.
+2. Put the plugin in your server's `plugins` folder.
 3. You are done. Now you can just start the server and hopefully enjoy this plugin.
 
 Config.yml (Supports Color Codes!)
